@@ -119,7 +119,7 @@ Output:
 `register(url:string,callback)` register a callback function to `url`
 
 - `url` : Api url path after baseUrl. The resulting url for the api is baseUrl/url.
-- `callback` : a function that take a single argunment as api parameter.
+- `callback` : a function that take a single argunment as api parameter, and return a result.
 
 ```javascript
 apiDemo.register('echo2',param => 'echo2:' + param);
@@ -128,7 +128,7 @@ apiDemo.register('echo2',param => 'echo2:' + param);
 #### registerObject
 `registerObject(object)` register all functions of an object as api callbacks.
 
-All functions of the object should take a single argunment as api parameter.
+All functions of the object should take a single argunment as api parameter, and return a result.
 
 The function name will be used api url.
 
@@ -142,10 +142,48 @@ var DemoObj = {
 apiDemo.registerObject(DemoObj);
 ```
 #### response
+`SimpleApi.response(req, res)` is a handle function for incoming api post request.
+Api parameter will be passed to corresponding callback.
+Callback result will be passed back to api client.
+
+`req, res` are request and response object pass in from expressjs post.
+
+```javascript
+// Post request + API response
+app.post(path.join(apiDemoUrl, '*'), (req, res) => apiDemo.response(req, res))
+```
 
 #### handler
 
+`SimpleApi.handler(req)` is an api handler function.
+It will invoke the corresponding callback base on the request url, and return the result.
 
+IT WILL NOT send out the result.
+
+IT IS NOT a expressjs post handler function. It needed to be called INSIDE the post handler function.
+
+Api handler can be use if additioanl action(eg: customing response header or error page)
+is required:
+
+```javascript
+// Post request + API handler
+app.post(path.join(apiDemoUrl, '*'), (req, res) => {
+	// Log request body before process
+	console.log(req.body);
+	try {
+		// Manual handler used, server code responsible to send result and handle error
+		// Use manual handler if custom header or custom 404 error are needed
+		let result = apiDemo.handler(req);
+
+		// Result must be return in json format
+		res.json(result);
+	}
+	catch (e) {
+		// Catch api not found error
+		res.status(e.status).end(e.error);
+	}
+})
+```
 
 ### Error Handleing
 
