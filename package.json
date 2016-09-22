@@ -1,6 +1,6 @@
 {
-	"name": "simple-api-node",
-	"description": "Node simple api handler that work with simple-api-client-ng2 or simple-api-client-node",
+	"name": "simple-api-express",
+	"description": "simple-api-express is an api handler that work with simple-api-client-ng2 or simple-api-client-node",
 	"main": "lib/simple-api.js",
 	"version": "0.2.0",
 	"license": "MIT",
@@ -21,14 +21,18 @@
 		"api"
 	],
 	"bugs": {
-		"url": "https://github.com/J-Siu/simple-api-node/issues"
+		"url": "https://github.com/J-Siu/simple-api-express/issues"
 	},
 	"repository": {
 		"type": "git",
-		"url": "git+https://github.com/J-Siu/simple-api-node.git"
+		"url": "git+https://github.com/J-Siu/simple-api-express.git"
 	},
 	"scripts": {
 		"build": "rm -rf lib && tsc",
 		"typings": "typings install"
+	},
+	"peerDependencies": {
+		"express":"^4.0.0",
+		"body-parser":"^1.15.2"
 	}
 }
