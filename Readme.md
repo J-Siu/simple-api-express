@@ -1,4 +1,4 @@
-# simple-api-node
+# simple-api-express
 
 [simple-api-express](https://github.com/J-Siu/simple-api-express) is an expressjs api handler (NOT middleware) that work with
 [simple-api-client-ng2](https://github.com/J-Siu/simple-api-client-ng2), an Angular 2 api service.
@@ -41,10 +41,10 @@ app.use(bodyParser.json());
 app.listen(8080);
 ```
 
-Import `simple-api-node`:
+Import `simple-api-express`:
 
 ```javascript
-const SimpleApi = require('simple-api-node').SimpleApi;
+const SimpleApi = require('simple-api-express').SimpleApi;
 ```
 
 Create api object with base url:
@@ -105,7 +105,7 @@ app.post(path.join(apiDemoUrl, '*'), (req, res) => {
 - `debug` will enable/disable debug log. Default to false.
 
 ```javascript
-const SimpleApi = require('simple-api-node').SimpleApi;
+const SimpleApi = require('simple-api-express').SimpleApi;
 const apiDemoUrl = '/demo';
 var apiDemo = new SimpleApi(apiDemoUrl, true); // enable debug
 ```
@@ -252,6 +252,8 @@ A detail example for both
 
 * 1.2.0
 	- Publish to NPM.
+* 1.2.1
+	- Fix Readme.md typo
 
 ## License
 
