@@ -6,7 +6,18 @@
 ## Index
 
 - [Install](#install)
-- [Usage](#usage)
+- [Usage Flow](#usage-flow)
+	- [API](#api)
+		- [constructor](#constructor)
+		- [debug](#debug)
+		- [list](#list)
+		- [register](#register)
+		- [registerObject](#registerobject)
+		- [response](#response)
+		- [handler](#handler)
+	- [Error Handleing](#error-handleing)
+		- [404 Not Found](#404-not-found)
+		- [Callback throw](#callback-throw)
 - [Example](#example)
 - [Contributors](#contributors)
 - [Changelog](#changelog)
@@ -26,7 +37,7 @@ npm install simple-api-express
 const express = require('express');
 var app = express();
 var bodyParser = require('body-parser');
-app.use(bodyParser.json())
+app.use(bodyParser.json());
 app.listen(8080);
 ```
 
@@ -187,11 +198,51 @@ app.post(path.join(apiDemoUrl, '*'), (req, res) => {
 
 ### Error Handleing
 
+There are two types of error.
 
+#### 404 Not Found
+
+When `response()` is called with an non-exist api url,
+it will response with a HTTP 404 Not Found.
+
+When `handle()` is called with an non-exist api url,
+it will throw an error,
+which can be caught in the post handle function.
+
+#### Callback throw
+
+When `response()` is called,
+and the invoked api callback throw an error,
+which will be passed to remote client.
+The remote client, using [simple-api-client-ng2](https://github.com/J-Siu/simple-api-client-ng2),
+will throw an exception with the error.
+
+When `handle()` is called,
+and the invoked api callback throw an error,
+the error can be inspected from the result object.
+
+```javascript
+		let result = apiDemo.handler(req);
+
+		// If api callback return
+		if(result.error) {
+			console.log(result.error);
+		}
+
+		// Result must be return in json format
+		res.json(result);
+```
+
+The remote client, using [simple-api-client-ng2](https://github.com/J-Siu/simple-api-client-ng2),
+will throw an exception with the error.
 
 ## Example
 
-[simple-api-example-ng2-express](https://github.com/J-Siu/simple-api-example-ng2-express)
+A detail example for both
+[simple-api-express](https://github.com/J-Siu/simple-api-express) and
+[simple-api-client-ng2](https://github.com/J-Siu/simple-api-client-ng2).
+
+- [simple-api-example-ng2-express](https://github.com/J-Siu/simple-api-example-ng2-express)
 
 ## Contributors
 
@@ -200,6 +251,7 @@ app.post(path.join(apiDemoUrl, '*'), (req, res) => {
 ## Changelog
 
 * 1.2.0
+	- Publish to NPM.
 
 ## License
 
