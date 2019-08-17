@@ -1,23 +1,29 @@
 # simple-api-express
 
-[simple-api-express](https://github.com/J-Siu/simple-api-express) is an expressjs api handler (NOT middleware) that work with
-[simple-api-client-ng2](https://github.com/J-Siu/simple-api-client-ng2), an Angular 2 api service.
+[simple-api-express](https://github.com/J-Siu/simple-api-express) is an ExpressJS api handler (NOT middleware) that work with
+[simple-api-client-ng2](https://github.com/J-Siu/ng2-simple-api-lib), an Angular api service.
+
+> To enable faster update, simple-api-client-ng2 switched to Angular CLI starting 8.2.0 and use new repository https://github.com/J-Siu/ng2-simple-api-lib/
+>
+> This new repository contains both library and server example.
+>
+> Library version < 8.2.0 are in old repository https://github.com/J-Siu/simple-api-client-ng2/
 
 ## Index
 
 - [Install](#install)
 - [Usage Flow](#usage-flow)
-	- [API](#api)
-		- [constructor](#constructor)
-		- [debug](#debug)
-		- [list](#list)
-		- [register](#register)
-		- [registerObject](#registerobject)
-		- [response](#response)
-		- [handler](#handler)
-	- [Error Handleing](#error-handleing)
-		- [404 Not Found](#404-not-found)
-		- [Callback throw](#callback-throw)
+  - [API](#api)
+    - [constructor](#constructor)
+    - [debug](#debug)
+    - [list](#list)
+    - [register](#register)
+    - [registerObject](#registerobject)
+    - [response](#response)
+    - [handler](#handler)
+  - [Error Handling](#error-handling)
+    - [404 Not Found](#404-not-found)
+    - [Callback throw](#callback-throw)
 - [Example](#example)
 - [Contributors](#contributors)
 - [Changelog](#changelog)
@@ -25,13 +31,13 @@
 
 ## Install
 
-```
+```sh
 npm install simple-api-express
 ```
 
 ## Usage Flow
 
-`simple-api-express` depends on expressjs middleware bodyParser for json body decode.
+`simple-api-express` depends on ExpressJS middleware bodyParser for json body decode.
 
 ```javascript
 const express = require('express');
@@ -79,26 +85,27 @@ is required before reply:
 ```javascript
 // Post request + API handler
 app.post(path.join(apiDemoUrl, '*'), (req, res) => {
-	// Log request body before process
-	console.log(req.body);
-	try {
-		// Manual handler used, server code responsible to send result and handle error
-		// Use manual handler if custom header or custom 404 error are needed
-		let result = apiDemo.handler(req);
+  // Log request body before process
+  console.log(req.body);
+  try {
+    // Manual handler used, server code responsible to send result and handle error
+    // Use manual handler if custom header or custom 404 error are needed
+    let result = apiDemo.handler(req);
 
-		// Result must be return in json format
-		res.json(result);
-	}
-	catch (e) {
-		// Catch api not found error
-		res.status(e.status).end(e.error);
-	}
+    // Result must be return in json format
+    res.json(result);
+  }
+  catch (e) {
+    // Catch api not found error
+    res.status(e.status).end(e.error);
+  }
 })
 ```
 
 ### API
 
 #### constructor
+
 `SimpleApi(baseUrl:string, debug:boolean)`
 
 - `baseUrl` will prefix all api url registered to this SimpleApi instance.
@@ -111,53 +118,63 @@ var apiDemo = new SimpleApi(apiDemoUrl, true); // enable debug
 ```
 
 #### debug
+
 `debug(enable: boolean)` can enable/disable debug log.
+
 ```javascript
 apiDemo.debug(false);
 ```
 
 #### list
+
 `list()` return a `string[]` containing all registered api url.
+
 ```javascript
 console.log(apiDemo.list());
 ```
+
 Output:
-```
+
+```json
 [ '/demo/echo', '/demo/echo2' ]
 ```
 
 #### register
+
 `register(url:string,callback)` register a callback function to `url`
 
 - `url` : Api url path after baseUrl. The resulting url for the api is baseUrl/url.
-- `callback` : a function that take a single argunment as api parameter, and return a result.
+- `callback` : a function that take a single argument as api parameter, and return a result.
 
 ```javascript
 apiDemo.register('echo2',param => 'echo2:' + param);
 ```
 
 #### registerObject
+
 `registerObject(object)` register all functions of an object as api callbacks.
 
-All functions of the object should take a single argunment as api parameter, and return a result.
+All functions of the object should take a single argument as api parameter, and return a result.
 
 The function name will be used api url.
 
 ```javascript
 var DemoObj = {
-	echo(r) {
-		return r;
-	}
+  echo(r) {
+    return r;
+  }
 }
 
 apiDemo.registerObject(DemoObj);
 ```
+
 #### response
+
 `SimpleApi.response(req, res)` is a handle function for incoming api post request.
 Api parameter will be passed to corresponding callback.
 Callback result will be passed back to api client.
 
-`req, res` are request and response object pass in from expressjs post.
+`req, res` are request and response object pass in from ExpressJS post.
 
 ```javascript
 // Post request + API response
@@ -171,98 +188,86 @@ It will invoke the corresponding callback base on the request url, and return th
 
 IT WILL NOT send out the result.
 
-IT IS NOT a expressjs post handler function. It needed to be called INSIDE the post handler function.
+IT IS NOT a ExpressJS post handler function. It needed to be called INSIDE the post handler function.
 
-Api handler can be use if additioanl action(eg: customing response header or error page)
+Api handler can be use if additional action(eg: customizing response header or error page)
 is required:
 
 ```javascript
 // Post request + API handler
 app.post(path.join(apiDemoUrl, '*'), (req, res) => {
-	// Log request body before process
-	console.log(req.body);
-	try {
-		// Manual handler used, server code responsible to send result and handle error
-		// Use manual handler if custom header or custom 404 error are needed
-		let result = apiDemo.handler(req);
+  // Log request body before process
+  console.log(req.body);
+  try {
+    // Manual handler used, server code responsible to send result and handle error
+    // Use manual handler if custom header or custom 404 error are needed
+    let result = apiDemo.handler(req);
 
-		// Result must be return in json format
-		res.json(result);
-	}
-	catch (e) {
-		// Catch api not found error
-		res.status(e.status).end(e.error);
-	}
+    // Result must be return in json format
+    res.json(result);
+  }
+  catch (e) {
+    // Catch api not found error
+    res.status(e.status).end(e.error);
+  }
 })
 ```
 
-### Error Handleing
+### Error Handling
 
 There are two types of error.
 
 #### 404 Not Found
 
-When `response()` is called with an non-exist api url,
-it will response with a HTTP 404 Not Found.
+When `response()` is called with an non-exist api url, it will response with a HTTP 404 Not Found.
 
-When `handle()` is called with an non-exist api url,
-it will throw an error,
-which can be caught in the post handle function.
+When `handle()` is called with an non-exist api url, it will throw an error, which can be caught in the post handle function.
 
 #### Callback throw
 
-When `response()` is called,
-and the invoked api callback throw an error,
-which will be passed to remote client.
-The remote client, using [simple-api-client-ng2](https://github.com/J-Siu/simple-api-client-ng2),
-will throw an exception with the error.
+When `response()` is called, and the invoked api callback throw an error, which will be passed to remote client. The remote client, using [simple-api-client-ng2](https://github.com/J-Siu/simple-api-client-ng2), will throw an exception with the error.
 
-When `handle()` is called,
-and the invoked api callback throw an error,
-the error can be inspected from the result object.
+When `handle()` is called, and the invoked api callback throw an error, the error can be inspected from the result object.
 
 ```javascript
-		let result = apiDemo.handler(req);
+let result = apiDemo.handler(req);
 
-		// If api callback return
-		if(result.error) {
-			console.log(result.error);
-		}
+// If api callback return
+if(result.error) {
+  console.log(result.error);
+}
 
-		// Result must be return in json format
-		res.json(result);
+// Result must be return in json format
+res.json(result);
 ```
 
-The remote client, using [simple-api-client-ng2](https://github.com/J-Siu/simple-api-client-ng2),
-will throw an exception with the error.
+The remote client, using [simple-api-client-ng2](https://github.com/J-Siu/simple-api-client-ng2), will throw an exception with the error.
 
 ## Example
 
 A detail example for both
 [simple-api-express](https://github.com/J-Siu/simple-api-express) and
-[simple-api-client-ng2](https://github.com/J-Siu/simple-api-client-ng2).
-
-- [simple-api-example-ng2-express](https://github.com/J-Siu/simple-api-example-ng2-express)
+[simple-api-client-ng2](https://github.com/J-Siu/ng2-simple-api-lib) is within [simple-api-client-ng2](https://github.com/J-Siu/ng2-simple-api-lib) repository.
 
 ## Contributors
 
-* [John Sing Dao Siu](https://github.com/J-Siu)
+- [John Sing Dao Siu](https://github.com/J-Siu)
 
 ## Changelog
 
-* 1.2.0
-	- Publish to NPM.
-* 1.2.1
-	- Fix Readme.md typo
-* 1.2.2
-	- Update package.json
-	- Update Readme.md
+- 1.2.0
+  - Publish to NPM.
+- 1.2.1
+  - Fix Readme.md typo
+- 1.2.2
+  - Update package.json
+  - Update Readme.md
 
 ## License
 
 The MIT License
 
-Copyright (c) 2016
+Copyright (c) 2019
 
 Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation files (the "Software"), to deal in the Software without restriction, including without limitation the rights to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the Software, and to permit persons to whom the Software is furnished to do so, subject to the following conditions:
 
