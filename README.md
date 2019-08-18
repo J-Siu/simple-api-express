@@ -1,41 +1,36 @@
-# simple-api-express
+[simple-api-express](https://github.com/J-Siu/simple-api-express) is an ExpressJS api handler (NOT middleware) that work with [simple-api-client-ng2](https://github.com/J-Siu/ng2-simple-api-lib), an Angular api service.
+<!--more-->
 
-[simple-api-express](https://github.com/J-Siu/simple-api-express) is an ExpressJS api handler (NOT middleware) that work with
-[simple-api-client-ng2](https://github.com/J-Siu/ng2-simple-api-lib), an Angular api service.
-
-> To enable faster update, simple-api-client-ng2 switched to Angular CLI starting 8.2.0 and use new repository https://github.com/J-Siu/ng2-simple-api-lib/
->
-> This new repository contains both library and server example.
->
-> Library version < 8.2.0 are in old repository https://github.com/J-Siu/simple-api-client-ng2/
-
-## Index
+<!-- TOC -->
 
 - [Install](#install)
 - [Usage Flow](#usage-flow)
-  - [API](#api)
-    - [constructor](#constructor)
-    - [debug](#debug)
-    - [list](#list)
-    - [register](#register)
-    - [registerObject](#registerobject)
-    - [response](#response)
-    - [handler](#handler)
-  - [Error Handling](#error-handling)
-    - [404 Not Found](#404-not-found)
-    - [Callback throw](#callback-throw)
+- [API](#api)
+  - [constructor](#constructor-function Object() { [native code] }1)
+  - [debug](#debug)
+  - [list](#list)
+  - [register](#register)
+  - [registerObject](#registerobject)
+  - [response](#response)
+  - [handler](#handler)
+- [Error Handling](#error-handling)
+  - [404 Not Found](#404-not-found)
+  - [Callback throw](#callback-throw)
 - [Example](#example)
+- [Repository](#repository)
 - [Contributors](#contributors)
 - [Changelog](#changelog)
 - [License](#license)
 
-## Install
+<!-- /TOC -->
+
+### Install
 
 ```sh
 npm install simple-api-express
 ```
 
-## Usage Flow
+### Usage Flow
 
 `simple-api-express` depends on ExpressJS middleware bodyParser for json body decode.
 
@@ -49,40 +44,39 @@ app.listen(8080);
 
 Import `simple-api-express`:
 
-```javascript
+```js
 const SimpleApi = require('simple-api-express').SimpleApi;
 ```
 
 Create api object with base url:
 
-```javascript
+```js
 const apiDemoUrl = '/demo';
 var apiDemo = new SimpleApi(apiDemoUrl, true); // enable debug
 ```
 
 Register a function as api callback:
 
-```javascript
+```js
 apiDemo.register('echo2',param => 'echo2:' + param);
 ```
 
 You can also register all functions of an object as api callbacks:
 
-```javascript
+```js
 apiDemo.registerObject(require('./api-object').DemoObj);
 ```
 
 Use express post and `SimpleApi.response()` to handle incoming api request:
 
-```javascript
+```js
 // Post request + API response
 app.post(path.join(apiDemoUrl, '*'), (req, res) => apiDemo.response(req, res))
 ```
 
-`SimpleApi.handler()` can be use if additioanl action(eg: customing response header or error page)
-is required before reply:
+`SimpleApi.handler()` can be use if additional action(eg: customizing response header or error page) is required before reply:
 
-```javascript
+```js
 // Post request + API handler
 app.post(path.join(apiDemoUrl, '*'), (req, res) => {
   // Log request body before process
@@ -111,7 +105,7 @@ app.post(path.join(apiDemoUrl, '*'), (req, res) => {
 - `baseUrl` will prefix all api url registered to this SimpleApi instance.
 - `debug` will enable/disable debug log. Default to false.
 
-```javascript
+```js
 const SimpleApi = require('simple-api-express').SimpleApi;
 const apiDemoUrl = '/demo';
 var apiDemo = new SimpleApi(apiDemoUrl, true); // enable debug
@@ -121,7 +115,7 @@ var apiDemo = new SimpleApi(apiDemoUrl, true); // enable debug
 
 `debug(enable: boolean)` can enable/disable debug log.
 
-```javascript
+```js
 apiDemo.debug(false);
 ```
 
@@ -129,13 +123,13 @@ apiDemo.debug(false);
 
 `list()` return a `string[]` containing all registered api url.
 
-```javascript
+```js
 console.log(apiDemo.list());
 ```
 
 Output:
 
-```json
+```js
 [ '/demo/echo', '/demo/echo2' ]
 ```
 
@@ -146,7 +140,7 @@ Output:
 - `url` : Api url path after baseUrl. The resulting url for the api is baseUrl/url.
 - `callback` : a function that take a single argument as api parameter, and return a result.
 
-```javascript
+```js
 apiDemo.register('echo2',param => 'echo2:' + param);
 ```
 
@@ -158,7 +152,7 @@ All functions of the object should take a single argument as api parameter, and 
 
 The function name will be used api url.
 
-```javascript
+```js
 var DemoObj = {
   echo(r) {
     return r;
@@ -170,30 +164,26 @@ apiDemo.registerObject(DemoObj);
 
 #### response
 
-`SimpleApi.response(req, res)` is a handle function for incoming api post request.
-Api parameter will be passed to corresponding callback.
-Callback result will be passed back to api client.
+`SimpleApi.response(req, res)` is a handle function for incoming api post request. Api parameter will be passed to corresponding callback. Callback result will be passed back to api client.
 
-`req, res` are request and response object pass in from ExpressJS post.
+`req, res` are request and response object pass in from expressjs post.
 
-```javascript
+```js
 // Post request + API response
 app.post(path.join(apiDemoUrl, '*'), (req, res) => apiDemo.response(req, res))
 ```
 
 #### handler
 
-`SimpleApi.handler(req)` is an api handler function.
-It will invoke the corresponding callback base on the request url, and return the result.
+`SimpleApi.handler(req)` is an api handler function. It will invoke the corresponding callback base on the request url, and return the result.
 
 IT WILL NOT send out the result.
 
-IT IS NOT a ExpressJS post handler function. It needed to be called INSIDE the post handler function.
+IT IS NOT a expressjs post handler function. It needed to be called INSIDE the post handler function.
 
-Api handler can be use if additional action(eg: customizing response header or error page)
-is required:
+Api handler can be use if additional action(eg: customizing response header or error page) is required:
 
-```javascript
+```js
 // Post request + API handler
 app.post(path.join(apiDemoUrl, '*'), (req, res) => {
   // Log request body before process
@@ -225,11 +215,13 @@ When `handle()` is called with an non-exist api url, it will throw an error, whi
 
 #### Callback throw
 
-When `response()` is called, and the invoked api callback throw an error, which will be passed to remote client. The remote client, using [simple-api-client-ng2](https://github.com/J-Siu/simple-api-client-ng2), will throw an exception with the error.
+When `response()` is called, and the invoked api callback throw an error, which will be passed to remote client.
+
+The remote client, using [simple-api-client-ng2](https://github.com/J-Siu/simple-api-client-ng2), will throw an exception with the error.
 
 When `handle()` is called, and the invoked api callback throw an error, the error can be inspected from the result object.
 
-```javascript
+```js
 let result = apiDemo.handler(req);
 
 // If api callback return
@@ -243,17 +235,21 @@ res.json(result);
 
 The remote client, using [simple-api-client-ng2](https://github.com/J-Siu/simple-api-client-ng2), will throw an exception with the error.
 
-## Example
+### Example
 
-A detail example for both
-[simple-api-express](https://github.com/J-Siu/simple-api-express) and
-[simple-api-client-ng2](https://github.com/J-Siu/ng2-simple-api-lib) is within [simple-api-client-ng2](https://github.com/J-Siu/ng2-simple-api-lib) repository.
+A detail example for how [simple-api-express](https://github.com/J-Siu/simple-api-express) and [simple-api-client-ng2](https://github.com/J-Siu/simple-api-client-ng2) work is in:
 
-## Contributors
+- [ng2-simple-api-lib](https://github.com/J-Siu/ng2-simple-api-lib)
+
+### Repository
+
+- [simple-api-express](https://github.com/J-Siu/simple-api-express)
+
+### Contributors
 
 - [John Sing Dao Siu](https://github.com/J-Siu)
 
-## Changelog
+### Changelog
 
 - 1.2.0
   - Publish to NPM.
@@ -262,8 +258,13 @@ A detail example for both
 - 1.2.2
   - Update package.json
   - Update Readme.md
+- 4.0.0
+  - Match ExpressJS major version
+  - README.md clean up
+  - package.json clean up
+  - simple-api.ts uses typescript import
 
-## License
+### License
 
 The MIT License
 
