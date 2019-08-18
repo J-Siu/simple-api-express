@@ -10,3 +10,4 @@ src
 tsconfig.json
 typings
 typings.json
+package-lock.json
