@@ -6,7 +6,7 @@
 - [Install](#install)
 - [Usage Flow](#usage-flow)
 - [API](#api)
-  - [constructor](#constructor-function Object() { [native code] }1)
+  - [constructor](#constructor)
   - [debug](#debug)
   - [list](#list)
   - [register](#register)
@@ -14,7 +14,7 @@
   - [response](#response)
   - [handler](#handler)
 - [Error Handling](#error-handling)
-  - [404 Not Found](#404-not-found)
+  - [Not Found](#not-found)
   - [Callback throw](#callback-throw)
 - [Example](#example)
 - [Repository](#repository)
@@ -263,12 +263,14 @@ A detail example for how [simple-api-express](https://github.com/J-Siu/simple-ap
   - README.md clean up
   - package.json clean up
   - simple-api.ts uses typescript import
+- 5.0.0
+  - Move target from ES5 to ES2015
 
 ### License
 
 The MIT License
 
-Copyright (c) 2019
+Copyright (c) 2021
 
 Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation files (the "Software"), to deal in the Software without restriction, including without limitation the rights to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the Software, and to permit persons to whom the Software is furnished to do so, subject to the following conditions:
 

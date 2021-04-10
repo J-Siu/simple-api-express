@@ -1,4 +1,4 @@
-import * as path from 'path';
+var path = require('path');
 
 export class SimpleApi {
 	// api callback array

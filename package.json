@@ -2,7 +2,7 @@
   "name": "simple-api-express",
   "description": "simple-api-express is an api handler that work with simple-api-client-ng2 or simple-api-client-node",
   "main": "lib/simple-api.js",
-  "version": "4.0.0",
+  "version": "5.0.0",
   "license": "MIT",
   "author": {
     "name": "John, Sing Dao, Siu",
@@ -28,11 +28,11 @@
     "build": "rm -rf lib && tsc"
   },
   "peerDependencies": {
-    "express": "^4.0.0",
-    "body-parser": "^1.15.2"
+    "body-parser": "^1.15.2",
+    "express": "^4.0.0"
   },
-  "dependencies": {
-    "@types/node": "^12.7.2",
+  "devDependencies": {
+    "@types/node": "^14.14.37",
     "body-parser": "^1.15.2",
     "express": "^4.0.0"
   }
