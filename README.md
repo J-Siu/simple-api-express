@@ -1,6 +1,9 @@
+# Angular Simple API Express [![Paypal donate](https://www.paypalobjects.com/en_US/i/btn/btn_donate_LG.gif)](https://www.paypal.com/donate/?business=HZF49NM9D35SJ&no_recurring=0&currency_code=CAD)
+
 [simple-api-express](https://github.com/J-Siu/simple-api-express) is an ExpressJS api handler (NOT middleware) that work with [simple-api-client-ng2](https://github.com/J-Siu/ng2-simple-api-lib), an Angular api service.
 <!--more-->
 
+### Table Of Content
 <!-- TOC -->
 
 - [Install](#install)
@@ -166,7 +169,7 @@ apiDemo.registerObject(DemoObj);
 
 `SimpleApi.response(req, res)` is a handle function for incoming api post request. Api parameter will be passed to corresponding callback. Callback result will be passed back to api client.
 
-`req, res` are request and response object pass in from expressjs post.
+`req, res` are request and response object pass in from ExpressJs post.
 
 ```js
 // Post request + API response
@@ -179,7 +182,7 @@ app.post(path.join(apiDemoUrl, '*'), (req, res) => apiDemo.response(req, res))
 
 IT WILL NOT send out the result.
 
-IT IS NOT a expressjs post handler function. It needed to be called INSIDE the post handler function.
+IT IS NOT a ExpressJs post handler function. It needed to be called INSIDE the post handler function.
 
 Api handler can be use if additional action(eg: customizing response header or error page) is required:
 
